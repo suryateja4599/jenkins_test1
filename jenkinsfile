@@ -17,10 +17,10 @@ pipeline {
             steps {
                 script {
                     // Build the Docker image using the Dockerfile from the workspace
-                    sh "docker build -t python-test ."
+                    sh "sudo docker build -t python-test ."
 
                     // Push the Docker image to a Docker registry
-                    sh "docker push surya459/practice-me459:python-test"
+                    sh "sudo docker push surya459/practice-me459:python-test"
                 }
             }
         }
