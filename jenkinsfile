@@ -1,27 +1,27 @@
 pipeline {
     agent any
- 
-    stages {
-        stage('Checkout') {
-            steps {
-                checkout scm
-            }
-        }
 
-        stage('Build Docker Image') {
+    stages {
+        stage('Fetch Dockerfile') {
             steps {
                 script {
-                    def dockerImage = docker.build("your-docker-image-name")
+                    // Check out the code from the feature branch
+                    checkout([$class: 'GitSCM', branches: [[name: 'feature']], userRemoteConfigs: [[url: 'https://github.com/suryateja4599/jenkins_test1.git']])
+
+                    // Copy the Dockerfile from the feature branch to the workspace
+                    sh 'cp -r feature/* .'
                 }
             }
         }
 
-        stage('Push Docker Image') {
+        stage('Build and Push Docker Image') {
             steps {
                 script {
-                    docker.withRegistry('https://your-docker-registry', 'your-registry-credentials-id') {
-                        dockerImage.push()
-                    }
+                    // Build the Docker image using the Dockerfile from the workspace
+                    sh "docker build -t python-test ."
+
+                    // Push the Docker image to a Docker registry
+                    sh "docker push surya459/practice-me459:python-test"
                 }
             }
         }
@@ -29,8 +29,13 @@ pipeline {
         stage('Deploy to Kubernetes') {
             steps {
                 script {
-                    sh "kubectl config use-context your-kubernetes-context"
-                    sh "kubectl set image deployment/your-deployment-name your-container-name=your-docker-image-name:latest"
+                    // Deploy the Docker image to Kubernetes
+                    sh "kubectl create deployment Python_testkube --image=surya459/practice-me459/python-test:tested_Ok"
+                    sh "kubectl expose deployment Python_testkube --type=NodePort --port=80 --target-port=80"
+                    sh "kubectl wait --for=condition=available deployment/Python_testkube --timeout=300s"
+                    sh "kubectl scale deployment Python_testkube --replicas=1"
+
+            
                 }
             }
         }
