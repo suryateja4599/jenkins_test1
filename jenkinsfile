@@ -1,0 +1,39 @@
+pipeline {
+    agent any
+ 
+    stages {
+        stage('Checkout') {
+            steps {
+                checkout scm
+            }
+        }
+
+        stage('Build Docker Image') {
+            steps {
+                script {
+                    def dockerImage = docker.build("your-docker-image-name")
+                }
+            }
+        }
+
+        stage('Push Docker Image') {
+            steps {
+                script {
+                    docker.withRegistry('https://your-docker-registry', 'your-registry-credentials-id') {
+                        dockerImage.push()
+                    }
+                }
+            }
+        }
+
+        stage('Deploy to Kubernetes') {
+            steps {
+                script {
+                    sh "kubectl config use-context your-kubernetes-context"
+                    sh "kubectl set image deployment/your-deployment-name your-container-name=your-docker-image-name:latest"
+                }
+            }
+        }
+    }
+}
+
