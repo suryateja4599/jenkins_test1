@@ -1,0 +1,25 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: python
+  labels:
+    app: python1
+spec:
+  replicas: 1  # Number of desired replicas
+  selector:
+    matchLabels:
+      app: python1
+  template:
+    metadata:
+      labels:
+        app: python1
+    spec:
+      containers:
+      - name: python
+        image: python:latest  # Update with your container image and tag
+        ports:
+        - containerPort: 80  # The port your application listens on
+        # Add additional container configuration, environment variables, volume mounts, etc.
+      # Add volumes and volume mounts if needed
+  # Add additional configuration like resource limits, liveness/readiness probes, etc.
+
