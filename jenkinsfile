@@ -9,6 +9,7 @@ pipeline {
                     checkout([$class: 'GitSCM', branches: [[name: 'feature']], userRemoteConfigs: [[url: 'https://github.com/suryateja4599/jenkins_test1.git']]])
 
                     // Copy the Dockerfile from the feature branch to the workspace
+                    sh 'mkdir feature'
                     sh 'cp -r feature/* .'
                 }
             }
