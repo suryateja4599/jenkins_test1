@@ -12,7 +12,7 @@ pipeline {
                     // Check out the code from the feature branch
                     checkout([$class: 'GitSCM', branches: [[name: 'feature']], userRemoteConfigs: [[url: 'https://github.com/suryateja4599/jenkins_test1.git']]])
                     // Copy kubeconfig to Jenkins workspace
-                    sh 'sudo cp /home/ubuntu9/.minikube/config $WORKSPACE/kubeconfig'
+                    sh 'sudo cp -r /home/ubuntu9/.minikube/config $WORKSPACE/kubeconfig'
                     // Set KUBECONFIG environment variable
                     env.KUBECONFIG = '$WORKSPACE/kubeconfig'
 
