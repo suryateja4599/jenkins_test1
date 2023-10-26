@@ -1,26 +1,15 @@
 pipeline {
     agent any
-
-    environment {
-        KUBECONFIG = '/home/ubuntu9/.minikube/config'
-    }
-
     stages {
         stage('Fetch Dockerfile') {
             steps {
                 script {
                     // Check out the code from the feature branch
                     checkout([$class: 'GitSCM', branches: [[name: 'feature']], userRemoteConfigs: [[url: 'https://github.com/suryateja4599/jenkins_test1.git']]])
-                    // Copy kubeconfig to Jenkins workspace
-                    sh 'sudo cp -r /home/ubuntu9/.minikube/config $WORKSPACE/kubeconfig'
-                    // Set KUBECONFIG environment variable
-                    env.KUBECONFIG = '$WORKSPACE/kubeconfig'
-
                 
                 }
             }
         }
-
         stage('Build and Push Docker Image') {
             steps {
                 script {
@@ -30,10 +19,10 @@ pipeline {
                     // Push the Docker image to a Docker registry
                     sh "sudo docker push surya459/practice-me459:python-test"
                     sh "sudo docker run --network mynetwork surya459/practice-me459:python-test"
-
                 }
             }
         }
+
         stage('Fetch Deployment YAML') {
             steps {
                 script {
@@ -44,10 +33,11 @@ pipeline {
         stage('Deploy to Kubernetes') {
             steps {
                 script {
-                    // Display Kubernetes contexts for verification
-                   sh "kubectl config get-contexts"
                     // Deploy the Docker image to Kubernetes
-                   sh "kubectl apply -f deployment.yml -n default"
+                    sh "kubectl create namespace pythonspace"
+                    sh "kubectl create deployment python_deployment --image=surya459/practice-me459/python-test:v1.0 -n pythonspace"
+                    sh "kubectl expose deployment Python_testkube --type=NodePort --port=80 --target-port=80 -n pythonspace"
+                   sh "kubectl apply -f deployment.yml"
                 }
             }
         }
