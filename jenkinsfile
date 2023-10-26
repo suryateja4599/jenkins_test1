@@ -30,7 +30,6 @@ pipeline {
         stage('Deploy to Kubernetes') {
             steps {
                 script {
-                     def imageName = "surya459/python-test:latest"
                     // Deploy the Docker image to Kubernetes
                     sh "kubectl create namespace pythonspace"
                     sh "kubectl create deployment python_deployment --image=surya459/practice-me459/python-test:v1.0 -n pythonspace"
