@@ -11,7 +11,10 @@ pipeline {
                 script {
                     // Check out the code from the feature branch
                     checkout([$class: 'GitSCM', branches: [[name: 'feature']], userRemoteConfigs: [[url: 'https://github.com/suryateja4599/jenkins_test1.git']]])
-                    sh 'kubectl get secret my-kubeconfig-secret -n default -o jsonpath="{.data.kubeconfig}" | base64 -d > $KUBECONFIG'
+                    // Copy kubeconfig to Jenkins workspace
+                    sh 'cp /home/ubuntu9/.minikube/config $WORKSPACE/kubeconfig'
+                    // Set KUBECONFIG environment variable
+                    env.KUBECONFIG = '$WORKSPACE/kubeconfig'
 
                 
                 }
