@@ -18,7 +18,7 @@ RUN pip install pymysql cryptography
 COPY script.py /app/
 
 # Specify the network to connect to
---network=my-network
+--network=mynetwork
 
 # Run the Python script when the container launches
 CMD ["python", "script.py"]
