@@ -3,6 +3,7 @@ pipeline {
 
     environment {
         KUBECONFIG = '/mnt/secrets/kubeconfig'
+    }
 
     stages {
         stage('Fetch Dockerfile') {
