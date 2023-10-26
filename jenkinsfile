@@ -30,13 +30,10 @@ pipeline {
         stage('Deploy to Kubernetes') {
             steps {
                 script {
+                     def imageName = "surya459/python-test:latest"
                     // Deploy the Docker image to Kubernetes
-                    sh "kubectl create deployment Python_testkube --image=surya459/practice-me459/python-test:python-test"
+                    sh "kubectl create deployment Python_testkube --image=surya459/practice-me459/python-test:latest"
                     sh "kubectl expose deployment Python_testkube --type=NodePort --port=80 --target-port=80"
-                    sh "kubectl wait --for=condition=available deployment/Python_testkube --timeout=300s"
-                    sh "kubectl scale deployment Python_testkube --replicas=1"
-
-            
                 }
             }
         }
