@@ -26,14 +26,18 @@ pipeline {
                 }
             }
         }
-
+        stage('Fetch Deployment YAML') {
+            steps {
+                script {
+                     sh 'curl -o deployment.yml https://github.com/suryateja4599/jenkins_test1.git/k8/path/to/deployment.yml'
+                }
+            }
+        }
         stage('Deploy to Kubernetes') {
             steps {
                 script {
                     // Deploy the Docker image to Kubernetes
-                    sh "kubectl create namespace pythonspace"
-                    sh "kubectl create deployment python_deployment --image=surya459/practice-me459/python-test:v1.0 -n pythonspace"
-                    sh "kubectl expose deployment Python_testkube --type=NodePort --port=80 --target-port=80 -n pythonspace"
+                   sh "kubectl apply -f deployment.yml"
                 }
             }
         }
