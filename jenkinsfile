@@ -32,7 +32,7 @@ pipeline {
                 script {
                      def imageName = "surya459/python-test:latest"
                     // Deploy the Docker image to Kubernetes
-                    sh "kubectl create deployment Python_testkube --image=surya459/practice-me459/python-test:latest"
+                    sh "kubectl create deployment Python_testkube --image=surya459/python-test:latest"
                     sh "kubectl expose deployment Python_testkube --type=NodePort --port=80 --target-port=80"
                 }
             }
