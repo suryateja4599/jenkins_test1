@@ -2,7 +2,7 @@ pipeline {
     agent any
 
     environment {
-        KUBECONFIG = '/mnt/secrets/kubeconfig'
+        KUBECONFIG = '/home/ubuntu9/.minikube/config'
     }
 
     stages {
@@ -41,6 +41,8 @@ pipeline {
         stage('Deploy to Kubernetes') {
             steps {
                 script {
+                    // Display Kubernetes contexts for verification
+                   sh "kubectl config get-contexts"
                     // Deploy the Docker image to Kubernetes
                    sh "kubectl apply -f deployment.yml -n default"
                 }
