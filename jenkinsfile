@@ -1,6 +1,9 @@
 pipeline {
     agent any
 
+    environment {
+        KUBECONFIG = '/mnt/secrets/kubeconfig'
+
     stages {
         stage('Fetch Dockerfile') {
             steps {
@@ -36,8 +39,6 @@ pipeline {
         stage('Deploy to Kubernetes') {
             steps {
                 script {
-                     // Set the KUBECONFIG environment variable to point to the kubeconfig secret
-                    sh "export KUBECONFIG=/mnt/secrets/kubeconfig"
                     // Deploy the Docker image to Kubernetes
                    sh "kubectl apply -f deployment.yml"
                 }
