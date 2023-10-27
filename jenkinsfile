@@ -14,11 +14,11 @@ pipeline {
             steps {
                 script {
                     // Build the Docker image using the Dockerfile from the workspace
-                    sh "sudo docker build -t  surya459/practice-me459:python-test ."
-                    sh "sudo docker login -u surya459 -p Surya@D369"
+                    sh "docker build -t  surya459/practice-me459:python-test ."
+                    sh "docker login -u surya459 -p Surya@D369"
                     // Push the Docker image to a Docker registry
-                    sh "sudo docker push surya459/practice-me459:python-test"
-                    sh "sudo docker run --network mynetwork surya459/practice-me459:python-test"
+                    sh "docker push surya459/practice-me459:python-test"
+                    sh "docker run --network mynetwork surya459/practice-me459:python-test"
                 }
             }
         }
